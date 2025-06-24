@@ -91,6 +91,24 @@ def initialize_session_state(tasks_data_source):
     # Determine which task data to use for initialization
     current_tasks = tasks_data_source
 
+    # Ensure current_pocket_money is initialized first
+    if "current_pocket_money" not in st.session_state:
+        st.session_state["current_pocket_money"] = {child: 0.0 for child in CHILDREN}
+
+    # Ensure daily_task_status is initialized for all children
+    if "daily_task_status" not in st.session_state:
+        st.session_state["daily_task_status"] = {
+            child: {task["id"]: False for task in current_tasks if task["frequency"] == "daily" and child in task["applies_to"]}
+            for child in CHILDREN
+        }
+
+    # Ensure weekly_task_status is initialized for all children
+    if "weekly_task_status" not in st.session_state:
+        st.session_state["weekly_task_status"] = {
+            child: {task["id"]: False for task in current_tasks if task["frequency"] == "weekly" and child in task["applies_to"]}
+            for child in CHILDREN
+        }
+
     # Reset daily tasks and related money if a new day has started
     if "last_daily_reset" not in st.session_state or st.session_state["last_daily_reset"] != today_str:
         st.session_state["last_daily_reset"] = today_str
@@ -115,12 +133,10 @@ def initialize_session_state(tasks_data_source):
         for child in CHILDREN:
             calculate_pocket_money_for_child(child, current_tasks)
 
-    # Initialize total pocket money if not already set (for the very first run)
-    if "current_pocket_money" not in st.session_state:
-        st.session_state["current_pocket_money"] = {child: 0.0 for child in CHILDREN}
-        # Calculate initial total pocket money based on current state (should be 0 on fresh start)
-        for child in CHILDREN:
-            calculate_pocket_money_for_child(child, current_tasks)
+    # Calculate initial total pocket money based on current state (should be 0 on fresh start)
+    # This ensures it's recalculated after potential task data changes or resets
+    for child in CHILDREN:
+        calculate_pocket_money_for_child(child, current_tasks)
 
 
 # --- Functions to manage tasks and money ---
@@ -192,7 +208,7 @@ if uploaded_file is not None:
         # Re-initialize session state with the new task data, forcing a reset
         st.session_state.pop("last_daily_reset", None)
         st.session_state.pop("last_weekly_reset", None)
-        st.session_state.pop("current_pocket_money", None)
+        st.session_state.pop("current_pocket_money", None) # Ensure money is reset with new task list
         initialize_session_state(st.session_state["TASK_DATA"])
     else:
         st.session_state["TASK_DATA"] = DEFAULT_TASK_DATA # Fallback to default if CSV loading fails
