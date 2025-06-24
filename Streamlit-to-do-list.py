@@ -69,7 +69,7 @@ def display_task_list(header, tasks_df):
 # --- GitHub URL Input ---
 # IMPORTANT: Replace this with the raw URL of your 'tasks.csv' file on GitHub
 # See instructions below on how to get this URL.
-CSV_URL = 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPOSITORY/main/tasks.csv'
+CSV_URL = 'https://github.com/Kim2783/Kidstodolist/blob/main/KIDS_TASKS%20-%20Sheet1.csv'
 
 # --- App Title ---
 st.title("🏆 Kids' Task Checklist 🏆")
