@@ -15,7 +15,7 @@ st.set_page_config(
 def load_data(url):
     """Loads task data from a raw GitHub URL."""
     try:
-        df = pd.read_csv(url)
+        df = pd.read_csv(https://github.com/Kim2783/Kidstodolist/blob/main/KIDS_TASKS%20-%20Sheet1.csv)
         # Clean up the 'Value' column to handle currency and text
         df['Reward'] = df['Value'].apply(lambda x: float(re.sub(r'[£$€,]', '', str(x))) if str(x)[0] in '£$€' else 0.0)
         df['IsMustDo'] = df['Value'].apply(lambda x: 'Must do' in str(x))
