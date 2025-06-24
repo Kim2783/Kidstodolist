@@ -15,9 +15,17 @@ st.set_page_config(
 )
 
 # --- Custom Styling (CSS) ---
-# This section has been updated with a new purple color scheme!
+# This section has been updated to make the text stand out more.
 st.markdown("""
 <style>
+    /* Import the Poppins font from Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    /* Apply the new font to the entire app */
+    html, body, [class*="st-"], [class*="css-"] {
+        font-family: 'Poppins', sans-serif;
+    }
+
     /* Main app background with a soft purple gradient */
     .stApp {
         background: linear-gradient(to right, #e6e6fa, #d8bfd8);
@@ -35,12 +43,32 @@ st.markdown("""
     /* Title style with a deep purple color */
     .st-emotion-cache-10trblm {
         color: #483d8b; /* Dark Slate Blue */
-        font-family: 'Comic Sans MS', cursive, sans-serif;
+        font-family: 'Comic Sans MS', cursive, sans-serif; /* Keep title font for fun */
     }
 
     /* Sidebar style with a complementary light purple */
     [data-testid="stSidebar"] {
         background-color: #dcd0ff; /* Light purple */
+    }
+
+    /* --- NEW STYLES FOR TEXT --- */
+    
+    /* Style for the checkbox labels to make them bigger and darker */
+    [data-testid="stCheckbox"] label {
+        font-size: 1.1rem; /* Increase font size */
+        font-weight: 400;  /* Regular weight for text like '(Must Do)' */
+        color: #31333F;   /* A strong, dark grey for high contrast */
+    }
+
+    /* Make the bolded part of the checkbox label (the task itself) even bolder */
+    [data-testid="stCheckbox"] label p strong {
+        font-weight: 600; /* Semi-bold weight */
+    }
+    
+    /* Style the headers inside the containers (e.g., 'Daily Tasks') */
+    [data-testid="stVerticalBlockBorderWrapper"] .st-emotion-cache-1l26guw {
+        color: #6a0dad; /* A vibrant purple */
+        font-weight: 600;
     }
 
 </style>
@@ -140,6 +168,7 @@ CSV_URL = 'https://raw.githubusercontent.com/Kim2783/Kidstodolist/main/KIDS_TASK
 tasks_df = load_data(CSV_URL)
 
 if tasks_df is not None:
+    # Renamed the st.header variables to be more descriptive, e.g., daily_header
     daily_tasks = tasks_df[tasks_df['Cadence'].str.lower() == 'daily']
     weekly_tasks = tasks_df[tasks_df['Cadence'].str.lower() == 'weekly']
     monthly_tasks = tasks_df[tasks_df['Cadence'].str.lower() == 'monthly']
